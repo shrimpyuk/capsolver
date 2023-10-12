@@ -1,4 +1,4 @@
-use reqwest::{Client, Url};
+use reqwestplus::{Client, Url};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::{collections::HashMap, time::Duration};
