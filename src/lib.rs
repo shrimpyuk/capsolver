@@ -321,7 +321,6 @@ pub struct GeeTestV4Token {
 #[serde(rename_all = "camelCase")]
 pub struct ReCaptchaToken {
     pub user_agent: String,
-    pub expire_time: isize,
     pub g_recaptcha_response: String,
 }
 
