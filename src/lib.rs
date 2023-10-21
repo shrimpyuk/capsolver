@@ -14,6 +14,8 @@ const MT_CAPTCHA_TYPES: [&'static str; 2] = ["MtCaptchaTask", "MtCaptchaTaskProx
 const AWS_WAF_TYPES: [&'static str; 2] = ["AwsWafTask", "AwsWafTaskProxyLess"];
 const CYBER_SI_ARA_TYPES: [&'static str; 2] = ["AwsWafTask", "AwsWafTaskProxyLess"];
 
+const IMPERVA_TYPES: [&'static str; 2] = ["AntiImpervaTask", "AntiImpervaTaskProxyLess"];
+
 #[derive(Clone)]
 pub struct Config {
     api_key: String,
@@ -735,6 +737,56 @@ impl Token {
             "metadata": metadata,
             "proxy": proxy
         });
+
+        config.create_task(body).await
+    }
+
+    pub async fn imperva(
+        &self,
+        r#type: &str,
+        website_url: &str,
+        user_agent: &str,
+        proxy: Option<&str>,
+        utmvc: bool,
+        reese84: bool,
+        reese_script_url: Option<&str>,
+        cookies: Option<Vec<HashMap<String, String>>>,
+        reese_token: Option<&str>,
+    ) -> Result<Value, String> {
+        let config = &self.config;
+        let mut body = config.make_body();
+
+        if !CYBER_SI_ARA_TYPES.contains(&r#type) {
+            return Err("Unsupported type".to_string());
+        }
+
+        if r#type == "AntiImpervaTask" && proxy.is_none() {
+            return Err("Proxy is required for AntiImpervaTask".to_string());
+        }
+
+        body["task"] = json!({
+            "type": r#type,
+            "websiteURL": website_url,
+            "userAgent": user_agent,
+            "utmvc": utmvc,
+            "reese84": reese84,
+        });
+
+        if proxy.is_some() {
+            body["task"]["proxy"] = json!(proxy.unwrap());
+        }
+
+        if reese_script_url.is_some() {
+            body["task"]["reeseScriptUrl"] = json!(reese_script_url.unwrap());
+        }
+
+        if cookies.is_some() {
+            body["task"]["cookies"] = json!(cookies.unwrap());
+        }
+
+        if reese_token.is_some() {
+            body["task"]["reeseToken"] = json!(reese_token.unwrap());
+        }
 
         config.create_task(body).await
     }
