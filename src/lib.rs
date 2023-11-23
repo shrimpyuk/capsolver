@@ -788,7 +788,7 @@ impl Token {
             body["task"]["reeseToken"] = json!(reese_token.unwrap());
         }
 
-        println!("{:?}", body);
+        //println!("{:?}", body);
 
         config.create_task(body).await
     }
