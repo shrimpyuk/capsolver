@@ -63,7 +63,7 @@ impl Config {
         match res {
             Ok(o) => {
                 let data: Value = serde_json::from_str(o.text().await.unwrap().as_str()).unwrap();
-
+                //println!("{:?}", data);
                 if data["errorId"].as_i64().unwrap() != 0 {
                     return Err(format!(
                         "{}: {}",
@@ -787,6 +787,8 @@ impl Token {
         if reese_token.is_some() {
             body["task"]["reeseToken"] = json!(reese_token.unwrap());
         }
+
+        println!("{:?}", body);
 
         config.create_task(body).await
     }
