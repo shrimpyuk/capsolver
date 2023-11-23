@@ -756,7 +756,7 @@ impl Token {
         let config = &self.config;
         let mut body = config.make_body();
 
-        if !CYBER_SI_ARA_TYPES.contains(&r#type) {
+        if !IMPERVA_TYPES.contains(&r#type) {
             return Err("Unsupported type".to_string());
         }
 
